@@ -53,10 +53,28 @@
     }),
     methods: {
       sendMessage() {
-        console.log(
-          this.name,this.email,this.message,
-        );
+        const data = {
+          name: this.name,
+          email: this.email,
+          message: this.message,
+        };
+
+        fetch('http://localhost:3000/sendMessage', {
+          method: 'POST', 
+          headers: {
+            'Content-Type': 'application/json', 
+          },
+          body: JSON.stringify(data) 
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
         console.log('sendMessage');
+        console.log(data);
       },
     },
   }

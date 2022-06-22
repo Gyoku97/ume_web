@@ -1,7 +1,7 @@
 import express from 'express';
-const logger = require('../logger');
-const { userService } = require('../services/inquiryService');
-const { userRequest } = require('../request/inquiryRequest');
+// const logger = require('../logger');
+const { inquiryServices } = require('../services/inquiryServices');
+const { inquiryRequest } = require('../request/inquiryRequest');
 
 /**
  * userコントローラー
@@ -15,18 +15,18 @@ class InquiryController {
    */
   async inquiry(req: express.Request, res: express.Response) {
     try {
-      userRequest.inquiry(req);
+      inquiryRequest.inquiry(req);
     } catch (e) {
-      logger.warn(e);
+      console.warn(e);
       return res.status(400).json({ error: e });
     }
 
     try {
-      const responseBody = await userService.inquiry(req);
-      logger.debug(responseBody);
+      const responseBody : String = await inquiryServices.inquiry(req);
+      console.debug(responseBody);
       return res.status(200).json(responseBody);
     } catch (e) {
-      logger.error(e);
+      console.error(e);
       return res.status(500).json({ error: e });
     }
   }
