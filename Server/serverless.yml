@@ -1,0 +1,86 @@
+service: ${env:NODE_ENV}-umeWebServer-API
+
+plugins:
+  - serverless-deployment-bucket
+provider:
+  name: aws
+  stage: ${env:STAGE}
+  runtime: nodejs14.x
+  region: ${env:REGION}
+  iam:
+    role: ${self:custom.${env:NODE_ENV}.lambdaRole}
+  apiGateway:
+    shouldStartNameWithService: true
+    apiKeys: ${self:custom.${env:NODE_ENV}.apiKeys}
+  deploymentBucket:
+    name: ${self:custom.${env:NODE_ENV}.deploymentBucket}
+  versionFunctions: false
+
+package:
+  patterns:
+    - .git/**
+    - test/**
+    - readme.md
+    - commands/**
+    - docs/**
+    - coverage/**
+    - jsdoc/**
+    - cloudFormation/**
+
+functions:
+  app:
+    handler: lambda.handler
+    memorySize: 512
+    timeout: 30
+    environment:
+      NODE_ENV: ${env:NODE_ENV}
+      REGION: ${env:REGION}
+    runtime: nodejs16.x
+    tags:
+      Project: umeWebServer
+    events:
+      - http:
+          path: /
+          method: ANY
+          private: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+      - http:
+          path: /{proxy+}
+          method: ANY
+          private: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+
+custom:
+  development:
+    apiKeys:
+      - name: ${env:NODE_ENV}-${env:STAGE}-ume-web-server-apikey
+    deploymentBucket: ume-web-server-deployment
+    lambdaRole: arn:aws:iam::925790463268:role/umeWebServer-lambda-role
+  staging:
+    apiKeys:
+      - name: ${env:NODE_ENV}-${env:STAGE}-ume-web-server-apikey
+    deploymentBucket: ume-web-server-deployment
+    lambdaRole: arn:aws:iam::925790463268:role/umeWebServer-lambda-role
+  production:
+    apiKeys:
+      - name: ${env:NODE_ENV}-${env:STAGE}-ume-web-server-apikey
+    deploymentBucket: ume-web-server-deployment
+    lambdaRole: arn:aws:iam::925790463268:role/umeWebServer-lambda-role

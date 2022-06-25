@@ -59,12 +59,13 @@
           message: this.message,
         };
 
-        fetch('http://localhost:3000/sendMessage', {
+        fetch('https://mooin74yhb.execute-api.ap-northeast-1.amazonaws.com/v1/sendMessage', {
           method: 'POST', 
           headers: {
             'Content-Type': 'application/json', 
+            'x-api-key':'91pLGxe1U22kn5CG1jWEBT90HrDlJloX5iIAAWa0',
           },
-          body: JSON.stringify(data) 
+          body: JSON.stringify(data) ,
         })
         .then(response => response.json())
         .then(data => {

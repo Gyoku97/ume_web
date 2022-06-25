@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  Stage:
+    Type: String
+    AllowedValues:
+      - development
+      - staging
+      - production
+  # LambdaAppApi:
+  #   Type: AWS::Lambda::Function
+  #   Properties:
+  #     Code:
+  #     Handler: "index.handler"
+  #     Role:
+  #     Runtime: "nodejs16.x"
+  #     Environment:
+  #       Variables:
+  #         env: ${Stage}
+  #     FunctionName: ${Stage}-private-chat-ChatLog-Lambda-app
+  #     MemorySize: 512
+  #     Timeout: 30
+  #     Tags: 
+  #       - Key: "Stage"
+  #         Value: ${Stage}
+  #       - Key: "Project"
+  #         Value: privateChat
